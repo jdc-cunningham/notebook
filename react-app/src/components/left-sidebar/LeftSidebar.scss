@@ -1,0 +1,82 @@
+.LeftSidebar {
+  position: relative;
+  width: 25%;
+  height: 100%;
+  padding-right: 0.5rem;
+  border-right: 1px solid #ccc;
+
+  &.collapsed {
+    width: 40px;
+
+    .LeftSidebar__collapse-icon {
+      left: 0;
+    }
+  }
+
+  h3 {
+    font-size: 1.125rem;
+    margin-top: 0.5rem;
+  }
+}
+
+.LeftSidebar__search-bar {
+  font-size: 1.25rem;
+  padding: 0.25rem;
+  width: 100%;
+}
+
+.LeftSidebar__no-clients-found {
+  font-size: 1.25rem;
+  margin-top: 0.5rem;
+}
+
+.LeftSidebar__search-result, .LeftSidebar__client {
+  margin-top: 0.25rem;
+  border: 1px solid #282828;
+  padding: 0.5rem;
+  font-size: 1.25rem;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #aaa;
+
+    h2 {
+      color: white;
+    }
+  }
+}
+
+.LeftSidebar__client {
+  border: 0;
+  border-bottom: 1px solid #ccc;
+  border-radius: 0;
+  padding-left: 0;
+}
+
+.LeftSidebar__collapse-icon {
+  position: absolute;
+  bottom: 1rem;
+  right: -1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border: 0;
+  padding: 0;
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+  z-index: 1;
+
+  img {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  &.collapsed {
+    img {
+      transform: rotate(180deg);
+    }
+  }
+}

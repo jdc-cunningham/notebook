@@ -41,7 +41,7 @@ const LeftSidebar = (props) => {
 
   const renderOpenedClientTabs = () => (
     openedClients.map((openedClient, index) => (
-      <div key={index} className="LeftSidebar__client" onClick={() => openSelectedClient(openedClient.client_id)}>
+      <div key={index} className="LeftSidebar__client" onClick={() => openSelectedClient(openedClient.note_id)}>
         <h2>{openedClient.name}</h2>
       </div>
     ))

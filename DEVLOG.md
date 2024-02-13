@@ -31,6 +31,18 @@ Then again idk... it makes sense from an organizational standpoint but I also wo
 
 Like it would be cool to see how you change over decades (depressing thought) I know how I've changed, from a dumb cringe jackass to slightly less
 
+4:44 PM
+
+Saw an error, won't open sidebar stuff you click, empty payload
+
+There's also a bug present on OG, after you make an entry the left search bar can't be interacted with unless you open developer tools so weird
+
+Maybe it's stuck in a refresh loop or something
+
+5:11 PM
+
+It's when there are multiple entries and you're switching between them
+
 ---
 
 02/02/2024

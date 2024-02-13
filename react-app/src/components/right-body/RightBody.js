@@ -195,7 +195,7 @@ const RightBody = (props) => {
     <div className="RightBody__client">
       <h1>{openClient.name}</h1>
       <p>{openClient.details}</p>
-      <button type="button" className="RightBody__client-add-note" onClick={() => addClientNote(openClient.id)}>Add note</button>
+      <button type="button" className="RightBody__client-add-note" onClick={() => addClientNote(openClient.id)}>Add note entry</button>
       <div ref={clientNotesRef}></div>
     </div>
   );
@@ -258,10 +258,10 @@ const RightBody = (props) => {
 
   return (
     <div className={`RightBody ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
-      {!openClient && <h1>Select or add a freelance client</h1>}
+      {!openClient && <h1>Select or add a note</h1>}
       {!openClient && <button className="RightBody__add-client" type="button" onClick={() => setShowAddClientModal(true)}>Add</button>}
       {openClient && renderClient()}
-      {openClient && <button className="RightBody__client-view-add-client" type="button" onClick={() => setShowAddClientModal(true)}>Add client</button>}
+      {openClient && <button className="RightBody__client-view-add-client" type="button" onClick={() => setShowAddClientModal(true)}>Add note</button>}
     </div>
   );
 }

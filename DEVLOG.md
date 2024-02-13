@@ -21,6 +21,10 @@ Hmm... I'm almost tempted to call them projects but too late
 
 I'm not going to sink too much time into this, I just want a separate entity and that's mostly on the DB side and some minor front end changes
 
+1:04 PM
+
+Alright looks like I have everything in a working state, this is all I'll put into this for now gotta go back to reality (me being poor)
+
 ---
 
 02/02/2024

@@ -115,10 +115,10 @@ const RightBody = (props) => {
       `
       <div class="RightBody__client-note">
         <p><b>Created:</b> ${prettyDate(clientNote.created)}</p>
-        <div class="RightBody__client-note-editable" contentEditable="true" data-id="${clientNote.id}" data-client-id="${clientNote.client_id}">
+        <div class="RightBody__client-note-editable" contentEditable="true" data-id="${clientNote.id}" data-client-id="${clientNote.note_id}">
           ${clientNote.note || '<div>Type here</div>'}
         </div>
-        <button type="button" class="RightBody__client-note-delete" title="delete note" data-id="${clientNote.id}" data-client-id="${clientNote.client_id}">
+        <button type="button" class="RightBody__client-note-delete" title="delete note" data-id="${clientNote.id}" data-client-id="${clientNote.note_id}">
           <img src="${DeleteIcon}" width="100%" alt="delete icon"/>
         </button>
       </div>
@@ -214,7 +214,7 @@ const RightBody = (props) => {
 
   useEffect(() => {
     if (openClient) {
-      renderClientNotes(openClient.clientNotes?.data);
+      renderClientNotes(openClient.noteEntries?.data);
     }
   }, [openClient]);
 

@@ -9,10 +9,10 @@ import AddClient from './components/modals/add-client/AddClient';
 const isLocal = window.location.href.includes('localhost');
 
 const baseApiPath = isLocal
-  ? 'http://localhost:5135' : 'http://192.168.1.144:5135'; // developed for local API
+  ? 'http://localhost:5145' : 'http://192.168.1.144:5145'; // developed for local API
 
 const socketPath = isLocal
-  ? 'ws://localhost:5136' : 'ws://192.168.1.144:5136';
+  ? 'ws://localhost:5146' : 'ws://192.168.1.144:5146';
 
 function App() {
   const [showAddClientModal, setShowAddClientModal] = useState(false);

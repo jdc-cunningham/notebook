@@ -35,7 +35,7 @@ app.post('/update-note-entry', updateNoteEntry)
 app.post('/update-open-note', updateOpenNote);
 app.post('/delete-note-entry', deleteNoteEntry);
 
-const wss = new WebSocket.Server({ port: 5136 });
+const wss = new WebSocket.Server({ port: 5146 });
 
 let connections = {};
 

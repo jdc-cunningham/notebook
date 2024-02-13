@@ -25,6 +25,12 @@ I'm not going to sink too much time into this, I just want a separate entity and
 
 Alright looks like I have everything in a working state, this is all I'll put into this for now gotta go back to reality (me being poor)
 
+There isn't a way to remove stuff from the sidebar, I should do that real quick
+
+Then again idk... it makes sense from an organizational standpoint but I also would like to remember or be reminded of what I was thinking about/working on in the past
+
+Like it would be cool to see how you change over decades (depressing thought) I know how I've changed, from a dumb cringe jackass to slightly less
+
 ---
 
 02/02/2024

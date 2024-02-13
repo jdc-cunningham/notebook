@@ -9,9 +9,9 @@ const port = 5135;
 app.use(cors());
 
 const {
-  addClient, getClient, searchClients, deleteClient, getLastOpenedClients,
-  addOpenedClient, deleteLastOpenedClient, addClientNote, updateClientNote,
-  updateOpenClient, deleteClientNote
+  addNote, getNote, searchNotes, deleteNote, getLastOpenedNotes,
+  addOpenedNote, deleteLastOpenedNote, addNoteEntry, updateNoteEntry,
+  deleteNoteEntry, updateOpenNote
 } = require('./methods');
 
 app.use(express.json({limit: '50mb'}));
@@ -23,17 +23,17 @@ app.use(
   })
 );
 
-app.post('/add-client', addClient);
-app.post('/get-client', getClient); // could use GET with /client-id/ pattern but eh...
-app.post('/search-clients', searchClients);
-app.post('/delete-client', deleteClient); // not using REST methods eg. DELETE
-app.get('/last-opened-clients', getLastOpenedClients);
-app.post('/add-opened-client', addOpenedClient);
-app.post('/delete-last-opened-client', deleteLastOpenedClient);
-app.post('/add-client-note', addClientNote);
-app.post('/update-client-note', updateClientNote)
-app.post('/update-open-client', updateOpenClient);
-app.post('/delete-client-note', deleteClientNote);
+app.post('/add-note', addNote);
+app.post('/get-note', getNote); // could use GET with /client-id/ pattern but eh...
+app.post('/search-notes', searchNotes);
+app.post('/delete-note', deleteNote); // not using REST methods eg. DELETE
+app.get('/last-opened-notes', getLastOpenedNotes);
+app.post('/add-opened-note', addOpenedNote);
+app.post('/delete-last-opened-note', deleteLastOpenedNote);
+app.post('/add-note-entry', addNoteEntry);
+app.post('/update-note-entry', updateNoteEntry)
+app.post('/update-open-note', updateOpenNote);
+app.post('/delete-note-entry', deleteNoteEntry);
 
 const wss = new WebSocket.Server({ port: 5136 });
 

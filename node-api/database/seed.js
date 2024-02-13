@@ -19,31 +19,28 @@ connection.connect((err) => {
 });
 
 // check if database exists, if not create it
-connection.query('CREATE DATABASE IF NOT EXISTS `freelancer_journal`', (error, results, fields) => {
+connection.query('CREATE DATABASE IF NOT EXISTS `notebook`', (error, results, fields) => {
   if (error) {
-      console.log('error checking if freelancer_journal database exists:', error.sqlMessage);
+      console.log('error checking if notebook database exists:', error.sqlMessage);
       return;
   }
 });
 
 // use the database
-connection.query('USE freelancer_journal', (error, results, fields) => {
+connection.query('USE notebook', (error, results, fields) => {
   if (error) {
-      console.log('an error occurred trying to use the freelancer_journal database', error);
+      console.log('an error occurred trying to use the notebook database', error);
       return;
   }
 });
 
 // build the various tables and their schemas
 
-// create clients table
 connection.query(
-  'CREATE TABLE `clients` (' +
+  'CREATE TABLE `notes` (' +
       '`id` int(11) NOT NULL AUTO_INCREMENT,' +
       '`name` varchar(255) NOT NULL,' +
       '`topics` varchar(255),' +
-      '`rate` float NOT NULL,' +
-      '`rate_type` varchar(255),' +
       '`details` longtext,' +
       '`created` datetime NOT NULL,' +
       '`last_updated` datetime NOT NULL,' +
@@ -52,41 +49,39 @@ connection.query(
      ') ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci',
   (error, results, fields) => {
       if (error) {
-          console.log('error creating table clients:', error.sqlMessage);
+          console.log('error creating table notes:', error.sqlMessage);
           return;
       }
   }
 )
 
-// client notes table
 connection.query(
-  'CREATE TABLE `client_notes` (' +
+  'CREATE TABLE `note_entries` (' +
       '`id` int(11) NOT NULL AUTO_INCREMENT,' +
-      '`client_id` int(11) NOT NULL,' +
+      '`note_id` int(11) NOT NULL,' +
       '`note` longtext,' +
       '`created` datetime NOT NULL,' +
       'PRIMARY KEY (`id`)' +
      ') ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci',
   (error, results, fields) => {
       if (error) {
-          console.log('error creating table clients:', error.sqlMessage);
+          console.log('error creating table notes:', error.sqlMessage);
           return;
       }
   }
 )
 
-// last opened clients
 connection.query(
-  'CREATE TABLE `last_opened_clients` (' +
+  'CREATE TABLE `last_opened_notes` (' +
       '`id` int(11) NOT NULL AUTO_INCREMENT,' +
-      '`client_id` int(11) NOT NULL,' +
+      '`note_id` int(11) NOT NULL,' +
       '`name` varchar(255) NOT NULL,' +
       '`opened` datetime NOT NULL,' +
       'PRIMARY KEY (`id`)' +
      ') ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci',
   (error, results, fields) => {
       if (error) {
-          console.log('error creating table last_opened_clients:', error.sqlMessage);
+          console.log('error creating table last_opened_notes:', error.sqlMessage);
           return;
       }
   }

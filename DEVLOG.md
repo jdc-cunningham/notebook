@@ -1,3 +1,18 @@
+02/13/2024
+
+12:04 PM
+
+Alright time to myself again finally and fresh brain
+
+Going to rework this so it's a separately-named instance and I can use it
+
+- [ ] api
+- [ ] front end
+
+
+
+---
+
 02/02/2024
 
 7:37 PM

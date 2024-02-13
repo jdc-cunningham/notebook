@@ -12,8 +12,6 @@ const AddClient = (props) => {
   const [clientInfo, setClientInfo] = useState({
     name: "",
     topics: "",
-    rate: 0.0,
-    rate_type: "hourly",
     details: ""
   });
 
@@ -28,20 +26,20 @@ const AddClient = (props) => {
     setAddingClient(true);
 
     axios.post(
-      `${baseApiPath}/add-client`,
+      `${baseApiPath}/add-note`,
       clientInfo
     )
     .then((res) => {
       if (res.status === 201) {
-        alert('Client added');
+        alert('Note added');
         setShowAddClientModal(false);
         setRefresh(true);
       } else {
-        alert('Failed to add client: ' + res.data.msg);
+        alert('Failed to add note: ' + res.data.msg);
       }
     })
     .catch((err) => {
-      alert(`Failed to add client:\n${err.response.data?.msg}`);
+      alert(`Failed to add note:\n${err.response.data?.msg}`);
       console.error(err);
     })
     .finally(() => {
@@ -52,17 +50,9 @@ const AddClient = (props) => {
   return (
     <div className="AddClient">
       <div className="AddClient__form">
-        <h1>Client Info</h1>
+        <h1>Note Info</h1>
         <input type="text" placeholder="name" value={clientInfo.name} onChange={(e) => updateClientInfo("name", e.target.value)}/>
         <input type="text" placeholder="topics" value={clientInfo.topics} onChange={(e) => updateClientInfo("topics", e.target.value)}/>
-        <span>
-          <input type="number" placeholder="rate" value={clientInfo.rate} onChange={(e) => updateClientInfo("rate", e.target.value)}/>
-          <select value={clientInfo.rate_type} onChange={(e) => updateClientInfo("rate_type", e.target.value)}>
-            <option disabled>rate type</option>
-            <option>hourly</option>
-            <option>project</option>
-          </select>
-        </span>
         <textarea placeholder="details" value={clientInfo.details} onChange={(e) => updateClientInfo("details", e.target.value)}/>
         <button type="button" className="AddClient__add" onClick={() => addClient()} disabled={addingClient}>Add</button>
         <button type="button" className="AddClient__form-close" onClick={() => setShowAddClientModal(false)}>

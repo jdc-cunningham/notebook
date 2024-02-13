@@ -17,6 +17,10 @@ Ugh... it's boring and tedious work but it will be done
 
 Hmm... I'm almost tempted to call them projects but too late
 
+12:44 PM
+
+I'm not going to sink too much time into this, I just want a separate entity and that's mostly on the DB side and some minor front end changes
+
 ---
 
 02/02/2024

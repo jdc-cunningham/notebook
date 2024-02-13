@@ -21,20 +21,20 @@ const LeftSidebar = (props) => {
     ))
   );
 
-  const openSelectedClient = (client_id) => {
+  const openSelectedClient = (note_id) => {
     axios.post(
-      `${baseApiPath}/update-open-client`,
-      { client_id }
+      `${baseApiPath}/update-open-note`,
+      { note_id }
     )
     .then((res) => {
       if (res.status === 200) {
         getLastOpenedClients();
       } else {
-        alert('Failed to open client: ' + res.data.msg);
+        alert('Failed to open note: ' + res.data.msg);
       }
     })
     .catch((err) => {
-      alert(`Failed to get opened client:\n${err.response.data?.msg}`);
+      alert(`Failed to get opened note:\n${err.response.data?.msg}`);
       console.error(err);
     });
   };
@@ -47,40 +47,40 @@ const LeftSidebar = (props) => {
     ))
   );
 
-  const getOpenClient = (clientId) => {
+  const getOpenClient = (noteId) => {
     axios.post(
-      `${baseApiPath}/get-client`,
-      { id: clientId }
+      `${baseApiPath}/get-note`,
+      { id: noteId }
     )
     .then((res) => {
       if (res.status === 200) {
         setOpenClient(res.data.client);
       } else {
-        alert('Failed to get opened client: ' + res.data.msg);
+        alert('Failed to get opened note: ' + res.data.msg);
       }
     })
     .catch((err) => {
-      alert(`Failed to get opened client:\n${err.response.data?.msg}`);
+      alert(`Failed to get opened note:\n${err.response.data?.msg}`);
       console.error(err);
     });
   }
 
   const getLastOpenedClients = () => {
     axios.get(
-      `${baseApiPath}/last-opened-clients`,
+      `${baseApiPath}/last-opened-notes`,
     )
     .then((res) => {
       if (res.status === 200) {
-        if (res.data.clients.length) {
-          setOpenedClients(res.data.clients);
-          getOpenClient(res.data.clients[0].client_id);
+        if (res.data.notes.length) {
+          setOpenedClients(res.data.notes);
+          getOpenClient(res.data.notes[0].note_id);
         }
       } else {
-        alert('Failed to get last opened clients: ' + res.data.msg);
+        alert('Failed to get last opened notes: ' + res.data.msg);
       }
     })
     .catch((err) => {
-      alert('Failed to get last opened clients');
+      alert('Failed to get last opened notes');
       console.error(err);
     });
   }
@@ -92,9 +92,9 @@ const LeftSidebar = (props) => {
     ]));
 
     axios.post(
-      `${baseApiPath}/add-opened-client`,
+      `${baseApiPath}/add-opened-note`,
       {
-        client_id: openedClient.id,
+        note_id: openedClient.id,
         name: openedClient.name
       }
     )
@@ -125,18 +125,18 @@ const LeftSidebar = (props) => {
       clearTimeout(searchTimeout);
       setSearchTimeout(setTimeout(() => {
         axios.post(
-          `${baseApiPath}/search-clients`,
+          `${baseApiPath}/search-notes`,
           { partialName: searchTerm }
         )
         .then((res) => {
           if (res.status === 200) {
-            setSearchResults(res.data.clients);
+            setSearchResults(res.data.notes);
           } else {
-            alert('Failed to search clients: ' + res.data.msg);
+            alert('Failed to search notes: ' + res.data.msg);
           }
         })
         .catch((err) => {
-          alert(`Failed to search clients:\n${err.response.data?.msg}`);
+          alert(`Failed to search notes:\n${err.response.data?.msg}`);
           console.error(err);
         });
       }, 250));

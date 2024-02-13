@@ -5,8 +5,6 @@ import './RightBody.scss'
 
 import DeleteIcon from '../../assets/icons/recycle-bin-line-icon.svg';
 
-import RightTopBar from '../right-top-bar/RightTopBar';
-
 import { prettyDate } from '../../utils';
 
 const RightBody = (props) => {
@@ -20,10 +18,10 @@ const RightBody = (props) => {
   const deleteClientNote = (clientNoteId, clientId, el) => {
     if (window.confirm("Delete entry?") === true) {
       axios.post(
-        `${baseApiPath}/delete-client-note`,
+        `${baseApiPath}/delete-note-entry`,
         {
-          client_note_id: clientNoteId,
-          client_id: clientId
+          note_entry_id: clientNoteId,
+          note_id: clientId
         }
       )
       .then((res) => {
@@ -34,11 +32,11 @@ const RightBody = (props) => {
             msg: 'refresh'
           }));
         } else {
-          alert('Failed to delete client note: ' + res.data.msg);
+          alert('Failed to delete note entry: ' + res.data.msg);
         }
       })
       .catch((err) => {
-        alert(`Failed to delete client note:\n${err.response.data?.msg}`);
+        alert(`Failed to delete note entry:\n${err.response.data?.msg}`);
         console.error(err);
       }); 
     }
@@ -67,12 +65,12 @@ const RightBody = (props) => {
     };
   }
   
-  const updateClientNote = (note_id, client_id, note_content) => {
+  const updateClientNote = (note_entry_id, note_id, note_content) => {
     axios.post(
-      `${baseApiPath}/update-client-note`,
+      `${baseApiPath}/update-note-entry`,
       {
+        note_entry_id,
         note_id,
-        client_id,
         note_content
       }
     )
@@ -83,11 +81,11 @@ const RightBody = (props) => {
           msg: 'refresh'
         }));
       } else {
-        alert('Failed to update client note: ' + res.data.msg);
+        alert('Failed to update note entry: ' + res.data.msg);
       }
     })
     .catch((err) => {
-      alert('Failed to update client note');
+      alert('Failed to update note entry');
       console.error(err);
     });
   }
@@ -168,11 +166,11 @@ const RightBody = (props) => {
     });
   };
 
-  const addClientNote = (client_id) => {
+  const addClientNote = (note_id) => {
     axios.post(
-      `${baseApiPath}/add-client-note`,
+      `${baseApiPath}/add-note-entry`,
       {
-        client_id
+        note_id
       }
     )
     .then((res) => {
@@ -184,11 +182,11 @@ const RightBody = (props) => {
 
         setRefresh(true);
       } else {
-        alert('Failed to add client note: ' + res.data.msg);
+        alert('Failed to add note entry: ' + res.data.msg);
       }
     })
     .catch((err) => {
-      alert(`Failed to add client note:\n${err.response.data?.msg}`);
+      alert(`Failed to add note entry:\n${err.response.data?.msg}`);
       console.error(err);
     });
   }
@@ -260,7 +258,6 @@ const RightBody = (props) => {
 
   return (
     <div className={`RightBody ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
-      <RightTopBar/>
       {!openClient && <h1>Select or add a freelance client</h1>}
       {!openClient && <button className="RightBody__add-client" type="button" onClick={() => setShowAddClientModal(true)}>Add</button>}
       {openClient && renderClient()}

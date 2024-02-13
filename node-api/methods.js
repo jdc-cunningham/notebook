@@ -5,14 +5,14 @@ require('dotenv').config({
   path: './.env'
 });
 
-const _clientExists = async (clientName) => (
+const _noteExists = async (noteName) => (
   new Promise ((resolve, reject) => {
     pool.query(
-      `SELECT id FROM clients WHERE name = ?`,
-      [clientName],
+      `SELECT id FROM notes WHERE name = ?`,
+      [noteName],
       (err, qres) => {
         if (err) {
-          reject(new Error("failed to search client"));
+          reject(new Error("failed to search note"));
         } else {
           resolve({
             err: false,
@@ -24,48 +24,48 @@ const _clientExists = async (clientName) => (
   })
 );
 
-const addClient = async (req, res) => {
-  const { name, topics, rate, rate_type, details } = req.body;
+const addNote = async (req, res) => {
+  const { name, topics, details } = req.body;
   const now = formatTimeStr(getDateTime());
 
-  let client = null;
-  let clientSearchErr = false;
+  let note = null;
+  let noteSearchErr = false;
 
   try {
-    client = await _clientExists(name);
+    note = await _noteExists(name);
   } catch (e) {
     console.error(e);
-    clientSearchErr = true;
+    noteSearchErr = true;
   }
 
-  if (clientSearchErr) {
+  if (noteSearchErr) {
     res.status(400).send({
       err: true,
-      msg: 'failed to check if client exists'
+      msg: 'failed to check if note exists'
     });
 
     return;
   }
 
-  if (client?.exists) {
+  if (note?.exists) {
     res.status(400).send({
       err: true,
-      msg: 'client exists'
+      msg: 'note exists'
     });
 
     return;
   }
 
   pool.query(
-    `INSERT INTO clients SET id = ?, name = ?, topics = ?, rate = ?, rate_type = ?, details = ?, created = ?, last_updated = ?`,
-    [null, name, topics, rate, rate_type, details, now, now],
+    `INSERT INTO notes SET id = ?, name = ?, topics = ?, details = ?, created = ?, last_updated = ?`,
+    [null, name, topics, details, now, now],
     (err, qres) => {
       if (err) {
-        console.error('failed to insert client', err);
+        console.error('failed to insert note', err);
 
         res.status(400).send({
           err: true,
-          msg: 'failed to add client'
+          msg: 'failed to add note'
         });
       } else {
         res.status(201).send({
@@ -76,18 +76,18 @@ const addClient = async (req, res) => {
   );
 };
 
-const _getClientNotes = (client_id) => (
+const _getNoteEntries = (note_id) => (
   new Promise((resolve, reject) => {
     pool.query(
-      `SELECT * FROM client_notes WHERE client_id = ? order by id ASC`,
-      [client_id],
+      `SELECT * FROM note_entries WHERE note_id = ? order by id ASC`,
+      [note_id],
       (err, qres) => {
         if (err) {
-          console.error('failed to get client notes', err);
+          console.error('failed to get note entries', err);
   
           reject({
             err: true,
-            msg: 'failed to get client'
+            msg: 'failed to get note entries'
           });
         } else {
           resolve({
@@ -100,29 +100,29 @@ const _getClientNotes = (client_id) => (
   })
 );
 
-const getClient = async (req, res) => {
+const getNote = async (req, res) => {
   const { id } = req.body;
 
   pool.query(
-    `SELECT * FROM clients WHERE id = ?`,
+    `SELECT * FROM notes WHERE id = ?`,
     [id],
     async (err, qres) => {
       if (err) {
-        console.error('failed to get client', err);
+        console.error('failed to get note', err);
 
         res.status(400).send({
           err: true,
-          msg: 'failed to get client'
+          msg: 'failed to get note'
         });
       } else {
         try {
-          const clientNotes = await _getClientNotes(qres[0].id);
+          const noteEntries = await _getNoteEntries(qres[0].id);
 
           res.status(200).send({
             err: false,
             client: {
               ...qres[0],
-              clientNotes
+              noteEntries
             }
           });
         } catch (e) {
@@ -130,7 +130,7 @@ const getClient = async (req, res) => {
 
           res.status(400).send({
             err: true,
-            msg: 'failed to get client notes'
+            msg: 'failed to get note entries'
           });
         }
       }
@@ -138,46 +138,46 @@ const getClient = async (req, res) => {
   );
 };
 
-const searchClients = async (req, res) => {
+const searchNotes = async (req, res) => {
   const { partialName } = req.body;
   const partialNameWildcard = '%' + partialName + '%';
 
   pool.query(
-    `SELECT * FROM clients WHERE name LIKE ?`,
+    `SELECT * FROM notes WHERE name LIKE ?`,
     [partialNameWildcard],
     (err, qres) => {
       if (err) {
-        console.error('failed to search clients', err);
+        console.error('failed to search notes', err);
 
         res.status(400).send({
           err: true,
-          msg: 'failed to search clients'
+          msg: 'failed to search notes'
         });
       } else {
         res.status(200).send({
           err: false,
-          clients: qres
+          notes: qres
         });
       }
     }
   );
 };
 
-const deleteClient = async (req, res) => {
+const deleteNote = async (req, res) => {
   const { id } = req.body;
 
   // technically bad pattern since it should be assured both steps complete
 
   pool.query(
-    `DELETE FROM client_notes WHERE client_id = ?`,
+    `DELETE FROM note_entries WHERE note_id = ?`,
     [id],
     (err, qres) => {
       if (err) {
-        console.error('failed to delete client_notes', err);
+        console.error('failed to delete note entries', err);
 
         res.status(400).send({
           err: true,
-          msg: 'failed to delete client notes'
+          msg: 'failed to delete note entries'
         });
 
         return;
@@ -186,15 +186,15 @@ const deleteClient = async (req, res) => {
   );
 
   pool.query(
-    `DELETE FROM clients WHERE id = ?`,
+    `DELETE FROM notes WHERE id = ?`,
     [id],
     (err, qres) => {
       if (err) {
-        console.error('failed to delete client', err);
+        console.error('failed to delete note', err);
 
         res.status(400).send({
           err: true,
-          msg: 'failed to delete client'
+          msg: 'failed to delete note'
         });
       } else {
         res.status(200).send({
@@ -205,22 +205,22 @@ const deleteClient = async (req, res) => {
   );
 };
 
-const updateClient = async (req, res) => {};
+const updateNote = async (req, res) => {};
 
-const addClientNote = async (req, res) => {
-  const { client_id } = req.body;
+const addNoteEntry = async (req, res) => {
+  const { note_id } = req.body;
   const now = formatTimeStr(getDateTime());
 
   pool.query(
-  `INSERT INTO client_notes SET id = ?, client_id = ?, note = ?, created = ?`,
-    [null, client_id, null, now],
+  `INSERT INTO note_entries SET id = ?, note_id = ?, note = ?, created = ?`,
+    [null, note_id, null, now],
     (err, qres) => {
       if (err) {
-        console.error('failed to add client note', err);
+        console.error('failed to add note entry', err);
 
         res.status(400).send({
           err: true,
-          msg: 'failed to add client note'
+          msg: 'failed to add note entry'
         });
       } else {
         res.status(201).send({
@@ -231,19 +231,19 @@ const addClientNote = async (req, res) => {
   );
 };
 
-const updateClientNote = async (req, res) => {
-  const { note_id, client_id, note_content } = req.body;
+const updateNoteEntry = async (req, res) => {
+  const { note_entry_id, note_id, note_content } = req.body;
 
   pool.query(
-    `UPDATE client_notes set note = ? WHERE id = ? AND client_id = ?`,
-    [note_content, note_id, client_id],
+    `UPDATE note_entries set note = ? WHERE id = ? AND note_id = ?`,
+    [note_content, note_entry_id, note_id],
     (err, qres) => {
       if (err) {
-        console.error('failed to update client note', err);
+        console.error('failed to update note entry', err);
 
         res.status(400).send({
           err: true,
-          msg: 'failed to update client note'
+          msg: 'failed to update note entry'
         });
       } else {
         res.status(200).send({
@@ -255,41 +255,41 @@ const updateClientNote = async (req, res) => {
 };
 
 // used to populate app
-const getLastOpenedClients = async (req, res) => {
+const getLastOpenedNotes = async (req, res) => {
   pool.query(
-    `SELECT * FROM last_opened_clients WHERE id > 0 ORDER BY opened DESC`,
+    `SELECT * FROM last_opened_notes WHERE id > 0 ORDER BY opened DESC`,
     (err, qres) => {
       if (err) {
-        console.error('failed to get last opened clients', err);
+        console.error('failed to get last opened notes', err);
 
         res.status(400).send({
           err: true,
-          msg: 'failed to get last opened clients'
+          msg: 'failed to get last opened notes'
         });
       } else {
         res.status(200).send({
           err: false,
-          clients: qres
+          notes: qres
         });
       }
     }
   );
 };
 
-const addOpenedClient = async (req, res) => {
-  const { client_id, name } = req.body;
+const addOpenedNote = async (req, res) => {
+  const { note_id, name } = req.body;
   const now = formatTimeStr(getDateTime());
 
   pool.query(
-    `INSERT INTO last_opened_clients SET id = ?, client_id = ?, name = ?, opened = ?`,
-    [null, client_id, name, now],
+    `INSERT INTO last_opened_notes SET id = ?, note_id = ?, name = ?, opened = ?`,
+    [null, note_id, name, now],
     (err, qres) => {
       if (err) {
-        console.error('failed to add opened client', err);
+        console.error('failed to add opened note', err);
 
         res.status(400).send({
           err: true,
-          msg: 'failed to add opened client'
+          msg: 'failed to add opened note'
         });
       } else {
         res.status(201).send({
@@ -300,22 +300,22 @@ const addOpenedClient = async (req, res) => {
   );
 };
 
-const deleteLastOpenedClient = async (req, res) => {};
+const deleteLastOpenedNote = async (req, res) => {};
 
-const updateOpenClient = async (req, res) => {
-  const { client_id } = req.body;
+const updateOpenNote = async (req, res) => {
+  const { note_id } = req.body;
   const now = formatTimeStr(getDateTime());
 
   pool.query(
-  `UPDATE last_opened_clients SET opened = ? WHERE client_id = ?`,
-    [now, client_id],
+  `UPDATE last_opened_notes SET opened = ? WHERE note_id = ?`,
+    [now, note_id],
     (err, qres) => {
       if (err) {
-        console.error('failed to update open client', err);
+        console.error('failed to update open note', err);
 
         res.status(400).send({
           err: true,
-          msg: 'failed to update open client'
+          msg: 'failed to update open note'
         });
       } else {
         res.status(200).send({
@@ -326,22 +326,20 @@ const updateOpenClient = async (req, res) => {
   );
 };
 
-const deleteClientNote = async (req, res) => {
-  const { client_note_id, client_id } = req.body;
-
-  console.log(client_note_id, client_id);
+const deleteNoteEntry = async (req, res) => {
+  const { note_entry_id, note_id } = req.body;
 
   pool.query(
-  `DELETE FROM client_notes WHERE id = ? AND client_id = ?`,
-    [client_note_id, client_id],
+  `DELETE FROM note_entries WHERE id = ? AND note_id = ?`,
+    [note_entry_id, note_id],
     (err, qres) => {
       console.log(qres);
       if (err) {
-        console.error('failed to delete client note', err);
+        console.error('failed to delete note entry', err);
 
         res.status(400).send({
           err: true,
-          msg: 'failed to delete client note'
+          msg: 'failed to delete note entry'
         });
       } else {
         res.status(200).send({
@@ -353,18 +351,18 @@ const deleteClientNote = async (req, res) => {
 }
 
 module.exports = {
-  addClient,
-  getClient,
-  searchClients,
-  deleteClient,
-  updateClient,
-  addClientNote,
-  updateClientNote,
-  getLastOpenedClients,
-  addOpenedClient,
-  deleteLastOpenedClient,
-  addClientNote,
-  updateClientNote,
-  updateOpenClient,
-  deleteClientNote
+  addNote,
+  getNote,
+  searchNotes,
+  deleteNote,
+  updateNote,
+  addNoteEntry,
+  updateNoteEntry,
+  getLastOpenedNotes,
+  addOpenedNote,
+  deleteLastOpenedNote,
+  addNoteEntry,
+  updateNoteEntry,
+  updateOpenNote,
+  deleteNoteEntry
 }

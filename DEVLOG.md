@@ -9,7 +9,13 @@ Going to rework this so it's a separately-named instance and I can use it
 - [ ] api
 - [ ] front end
 
+12:10 PM
 
+Ugh... it's boring and tedious work but it will be done
+
+12:18 PM
+
+Hmm... I'm almost tempted to call them projects but too late
 
 ---
 

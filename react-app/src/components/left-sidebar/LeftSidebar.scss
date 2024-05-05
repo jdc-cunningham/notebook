@@ -4,6 +4,7 @@
   height: 100%;
   padding-right: 0.5rem;
   border-right: 1px solid #ccc;
+  overflow: hidden auto;
 
   &.collapsed {
     width: 40px;
@@ -55,9 +56,9 @@
 }
 
 .LeftSidebar__collapse-icon {
-  position: absolute;
+  position: fixed;
   bottom: 1rem;
-  right: -1rem;
+  left: calc(25% - 52px);
   display: flex;
   align-items: center;
   justify-content: center;

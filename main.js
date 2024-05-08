@@ -14,7 +14,8 @@ app.on('ready', () => {
     // create new window
     mainWindow = new BrowserWindow({
         width: 1400,
-        height: 900
+        height: 900,
+        icon: path.join(__dirname, 'icon256x256.png')
     });
 
     // load html file into window

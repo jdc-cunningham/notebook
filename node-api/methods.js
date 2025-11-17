@@ -303,7 +303,7 @@ const addOpenedNote = async (req, res) => {
     const last_opened_note = await _lastOpenedNoteExists(name);
 
     if (last_opened_note.exists) {
-      res.status(200).send({ // not true
+      res.status(200).send({
         err: false,
       });
     }

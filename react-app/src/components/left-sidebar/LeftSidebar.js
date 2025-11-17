@@ -104,6 +104,8 @@ const LeftSidebar = (props) => {
         setSearchTerm('');
         setSearchResults([]);
         getLastOpenedClients();
+      } else if (res.status === 200) {
+        alert('Opened note already exists');
       } else {
         alert('Failed to add opened client: ' + res.data.msg);
       }

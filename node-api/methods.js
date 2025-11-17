@@ -24,6 +24,25 @@ const _noteExists = async (noteName) => (
   })
 );
 
+const _lastOpenedNoteExists = async (noteName) => (
+  new Promise ((resolve, reject) => {
+    pool.query(
+      `SELECT name FROM last_opened_notes WHERE name = ?`,
+      [noteName],
+      (err, qres) => {
+        if (err) {
+          reject(new Error("failed to find opened note"));
+        } else {
+          resolve({
+            err: false,
+            exists: qres.length ? true : false
+          });
+        }
+      }
+    );
+  })
+);
+
 const addNote = async (req, res) => {
   const { name, topics, details } = req.body;
   const now = formatTimeStr(getDateTime());
@@ -279,6 +298,23 @@ const getLastOpenedNotes = async (req, res) => {
 const addOpenedNote = async (req, res) => {
   const { note_id, name } = req.body;
   const now = formatTimeStr(getDateTime());
+
+  try {
+    const last_opened_note = await _lastOpenedNoteExists(name);
+
+    if (last_opened_note.exists) {
+      res.status(201).send({ // not true
+        err: false,
+      });
+    }
+  } catch (e) {
+    console.error(e);
+
+    res.status(400).send({
+      err: true,
+      msg: 'failed to add opened note'
+    });
+  }
 
   pool.query(
     `INSERT INTO last_opened_notes SET id = ?, note_id = ?, name = ?, opened = ?`,

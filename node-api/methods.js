@@ -303,9 +303,27 @@ const addOpenedNote = async (req, res) => {
     const last_opened_note = await _lastOpenedNoteExists(name);
 
     if (last_opened_note.exists) {
-      res.status(200).send({
-        err: false,
-      });
+      // lazy copied code
+      pool.query(
+        `UPDATE last_opened_notes SET opened = ? WHERE note_id = ?`,
+        [now, note_id],
+        (err, qres) => {
+          if (err) {
+            console.error('failed to update open note', err);
+
+            res.status(400).send({
+              err: true,
+              msg: 'failed to update open note'
+            });
+          } else {
+            res.status(200).send({
+              err: false,
+            });
+          }
+        }
+      );
+  
+      return;
     }
   } catch (e) {
     console.error(e);

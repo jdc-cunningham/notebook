@@ -86,43 +86,32 @@ const LeftSidebar = (props) => {
   }
 
   const updateOpenedClients = (openedClient) => {
-    if (openedClient.id in openedClients.map(client => client.note_id)) {
-      setOpenedClients(prevOpenedClients => ([
-        openedClient,
-        ...prevOpenedClients.filter(client => client.note_id !== openedClient.id)
-      ]));
+    setOpenedClients(prevOpenedClients => ([
+      openedClient,
+      prevOpenedClients
+    ]));
 
-      setSearchTerm('');
-      setSearchResults([]);
-      getOpenClient(openedClient.id);
-    } else {
-      setOpenedClients(prevOpenedClients => ([
-        openedClient,
-        prevOpenedClients
-      ]));
-
-      axios.post(
-        `${baseApiPath}/add-opened-note`,
-        {
-          note_id: openedClient.id,
-          name: openedClient.name
-        }
-      )
-      .then((res) => {
-        if (res.status === 201 || res.status === 200) {
-          setOpenClient(openedClient);
-          setSearchTerm('');
-          setSearchResults([]);
-          getLastOpenedClients();
-        } else {
-          alert('Failed to add opened client: ' + res.data.msg);
-        }
-      })
-      .catch((err) => {
-        alert(`Failed to search clients:\n${err.response.data?.msg}`);
-        console.error(err);
-      });
-    }
+    axios.post(
+      `${baseApiPath}/add-opened-note`,
+      {
+        note_id: openedClient.id,
+        name: openedClient.name
+      }
+    )
+    .then((res) => {
+      if (res.status === 201 || res.status === 200) {
+        setSearchTerm('');
+        setSearchResults([]);
+        setOpenClient(openedClient);
+        getLastOpenedClients();
+      } else {
+        alert('Failed to add opened client: ' + res.data.msg);
+      }
+    })
+    .catch((err) => {
+      alert(`Failed to search clients:\n${err.response.data?.msg}`);
+      console.error(err);
+    });
   }
 
   useEffect(() => {
